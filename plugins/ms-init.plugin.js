@@ -30,7 +30,7 @@ MsInitPlugin.prototype.do = function (tables,config) {
     MsInitPlugin.__super__.writeFileSync(modulePomPath,modulePomDistPath,{
         config:config
     });
-    let xmlPackagePath = path.join(distPath,"src/main/java/resources/mybatis");
+    let xmlPackagePath = path.join(distPath,"src/main/resources/mybatis");
     MsInitPlugin.__super__.createFolder(xmlPackagePath);
     
     let prefixMap = {};

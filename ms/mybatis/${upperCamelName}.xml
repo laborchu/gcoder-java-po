@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="A${table.upperCamelName}">
+<mapper namespace="${table.upperCamelName}">
 
     <sql id="${table.lowerCamelName}JoinMap">
         <%table.fieldArray.forEach(function(field){%>,${table.abbr}.${field.fieldName} as ${table.abbr}_${field.fieldName}
