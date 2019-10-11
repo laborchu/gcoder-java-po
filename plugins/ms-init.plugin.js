@@ -26,17 +26,24 @@ MsInitPlugin.prototype.do = function (tables,config) {
         config:config
     });
     let modulePomPath = path.join(msPath, "pom",'module-pom.xml');
-    let modulePomDistPath = path.join(baseModulePath, 'pom.xml');
+    let modulePomDistPath = path.join(distPath, 'pom.xml');
     MsInitPlugin.__super__.writeFileSync(modulePomPath,modulePomDistPath,{
         config:config
     });
+    let xmlPackagePath = path.join(distPath,"src/main/java/resources/mybatis");
+    MsInitPlugin.__super__.createFolder(xmlPackagePath);
     
+    let prefixMap = {};
     for(let table of tables){
         if(table.prefix=='qrtz'){
             continue;
         }
 
-        let modulePackagePath = path.join(distPath,"src/main/java",config.java.package.vo.replace(/\./g,'/'),table.prefix);
+        let modulePackagePath = path.join(distPath,"src/main/java",config.java.package.po.replace(/\./g,'/'),table.prefix);
+        if(!prefixMap[table.prefix]){
+            MsInitPlugin.__super__.createFolder(modulePackagePath);
+        }
+
         let poTemplatePath = path.join(msPath, "po",'${upperCamelName}PO.java');
         let poDistPath = path.join(modulePackagePath, table.upperCamelName+'PO.java');
         MsInitPlugin.__super__.writeFileSync(poTemplatePath,poDistPath,{

@@ -5,6 +5,6 @@
   
     <modelVersion>4.0.0</modelVersion>
     <groupId>${config.java.groupId}</groupId>
-    <artifactId>persist${prefix}</artifactId>
+    <artifactId>module-po</artifactId>
     <version>${config.java.version}</version>
 </project>
