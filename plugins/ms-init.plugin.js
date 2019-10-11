@@ -15,47 +15,28 @@ MsInitPlugin.prototype.do = function (tables,config) {
     let gcoderPath = path.join(gcoderFolder, config.gcoder);
     let msPath = path.join(gcoderPath, "ms");
 
-	let distPath = path.join(rootFolder, ".gcoder", "dist", config.gcoder);
+	let distPath = path.join(rootFolder, "modules", "module-base", "module-po");
     MsInitPlugin.__super__.createFolder(distPath);
 
-    let baseModulePath = path.join(distPath, 'base');
-    let basePackagePath = path.join(baseModulePath,"src/main/java",config.java.package.po.replace(/\./g,'/'));
+    let basePackagePath = path.join(distPath,"src/main/java",config.java.package.po.replace(/\./g,'/'));
     MsInitPlugin.__super__.createFolder(basePackagePath);
     let basePath = path.join(msPath, "po",'BasePO.java');
     let baseDistPath = path.join(basePackagePath, 'BasePO.java');
     MsInitPlugin.__super__.writeFileSync(basePath,baseDistPath,{
         config:config
     });
-    let modulePomPath = path.join(msPath, "pom",'base-pom.xml');
+    let modulePomPath = path.join(msPath, "pom",'module-pom.xml');
     let modulePomDistPath = path.join(baseModulePath, 'pom.xml');
     MsInitPlugin.__super__.writeFileSync(modulePomPath,modulePomDistPath,{
         config:config
     });
     
-    
-    let prefixMap = {};
-    let prefixList = [];
     for(let table of tables){
         if(table.prefix=='qrtz'){
             continue;
         }
-        let modulePath = path.join(distPath, table.prefix);
-        let modulePackagePath = path.join(modulePath,"src/main/java",config.java.package.po.replace(/\./g,'/'),table.prefix);
-        let xmlPackagePath = path.join(modulePath,"src/main/java/META-INF/mybatis");
-        if(!prefixMap[table.prefix]){
-            MsInitPlugin.__super__.createFolder(modulePackagePath);
-            MsInitPlugin.__super__.createFolder(xmlPackagePath);
 
-            modulePomPath = path.join(msPath, "pom",'module-pom.xml');
-            modulePomDistPath = path.join(modulePath, 'pom.xml');
-            MsInitPlugin.__super__.writeFileSync(modulePomPath,modulePomDistPath,{
-                config:config,
-                prefix:'-'+table.prefix
-            });
-            prefixList.push(table.prefix);
-            prefixMap[table.prefix] = true;
-        }
-
+        let modulePackagePath = path.join(distPath,"src/main/java",config.java.package.vo.replace(/\./g,'/'),table.prefix);
         let poTemplatePath = path.join(msPath, "po",'${upperCamelName}PO.java');
         let poDistPath = path.join(modulePackagePath, table.upperCamelName+'PO.java');
         MsInitPlugin.__super__.writeFileSync(poTemplatePath,poDistPath,{
@@ -70,11 +51,4 @@ MsInitPlugin.prototype.do = function (tables,config) {
 			config: config
         });
     }
-
-    let pomPath = path.join(msPath, "pom",'parent-pom.xml');
-    let pomDistPath = path.join(distPath, 'pom.xml');
-    MsInitPlugin.__super__.writeFileSync(pomPath,pomDistPath,{
-        config:config,
-        modules:prefixList
-    });
 };
